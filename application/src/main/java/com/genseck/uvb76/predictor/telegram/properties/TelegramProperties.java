@@ -1,4 +1,4 @@
-package com.genseck.uvb76.predictor.properties;
+package com.genseck.uvb76.predictor.telegram.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

@@ -1,6 +1,7 @@
-package com.genseck.uvb76.predictor.configuration;
+package com.genseck.uvb76.predictor.telegram.configuration;
 
-import com.genseck.uvb76.predictor.properties.TelegramProperties;
+
+import com.genseck.uvb76.predictor.telegram.properties.TelegramProperties;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.request.GetChat;
@@ -24,11 +25,6 @@ public class TelegramConfiguration {
 
         var response = bot.execute(new GetChat(properties.getChannelId()));
         log.warn("Checking self-identity {}", response);
-
-        //
-//        var msgResponse = bot.execute(new SendMessage(properties.getChannelId(), "ID"));
-//        log.warn("ME {}", msgResponse);
-
 
         bot.setUpdatesListener(updates -> {
 
