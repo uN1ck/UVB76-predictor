@@ -41,7 +41,7 @@ public class UVBReaderService {
         if (isTest) {
             ClassLoader classloader = Thread.currentThread().getContextClassLoader();
             try {
-                URL url = classloader.getResource("example.json");
+                URL url = classloader.getResource("example-local.json");
                 Path path = Paths.get(url.toURI());
                 var line = Files.readAllLines(path, StandardCharsets.UTF_8).stream().collect(Collectors.joining());
                 var om = new ObjectMapper();
