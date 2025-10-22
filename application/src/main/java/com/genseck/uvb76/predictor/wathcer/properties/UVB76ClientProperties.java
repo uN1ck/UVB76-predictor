@@ -6,6 +6,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 @ConfigurationProperties("uvb76.client")
 public class UVB76ClientProperties {
-    private String baseUrl;
-    private String channel;
+  private String baseUrl;
+  private String channel;
 }

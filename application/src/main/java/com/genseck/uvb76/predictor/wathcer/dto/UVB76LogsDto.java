@@ -1,9 +1,8 @@
 package com.genseck.uvb76.predictor.wathcer.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
-
 import java.util.List;
+import lombok.Data;
 
 @Data
 public class UVB76LogsDto {

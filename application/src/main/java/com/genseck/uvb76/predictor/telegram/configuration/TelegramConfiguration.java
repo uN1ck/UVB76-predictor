@@ -1,6 +1,5 @@
 package com.genseck.uvb76.predictor.telegram.configuration;
 
-
 import com.genseck.uvb76.predictor.telegram.properties.TelegramProperties;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
@@ -17,34 +16,35 @@ import org.springframework.context.annotation.Import;
 @Import(TelegramProperties.class)
 public class TelegramConfiguration {
 
-    private final TelegramProperties properties;
+  private final TelegramProperties properties;
 
-    @Bean
-    public TelegramBot newTelegramBot() {
-        TelegramBot bot = new TelegramBot(properties.getToken());
+  @Bean
+  public TelegramBot newTelegramBot() {
+    TelegramBot bot = new TelegramBot(properties.getToken());
 
-        var response = bot.execute(new GetChat(properties.getChannelId()));
-        log.warn("Checking self-identity {}", response);
+    var response = bot.execute(new GetChat(properties.getChannelId()));
+    log.warn("Checking self-identity {}", response);
 
-        bot.setUpdatesListener(updates -> {
-
-            updates.forEach(update -> {
+    bot.setUpdatesListener(
+        updates -> {
+          updates.forEach(
+              update -> {
                 log.warn("UPDATE: {}", update);
-            });
+              });
 
-            return UpdatesListener.CONFIRMED_UPDATES_ALL;
-        }, e -> {
-            if (e.response() != null) {
-                // got bad response from telegram
-                e.response().errorCode();
-                e.response().description();
-            } else {
-                // probably network error
-                e.printStackTrace();
-            }
+          return UpdatesListener.CONFIRMED_UPDATES_ALL;
+        },
+        e -> {
+          if (e.response() != null) {
+            // got bad response from telegram
+            e.response().errorCode();
+            e.response().description();
+          } else {
+            // probably network error
+            e.printStackTrace();
+          }
         });
 
-        return bot;
-    }
-
+    return bot;
+  }
 }
