@@ -4,7 +4,10 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Data
-@ConfigurationProperties("uvb76.ai")
-public class AiAuthProperties {
-  private String authKey;
+@ConfigurationProperties("uvb76.ai.model")
+public class AiModelProperties {
+
+  private float temperature;
+  private float topP;
+  private int tokens;
 }

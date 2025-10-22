@@ -8,5 +8,4 @@ import org.springframework.context.annotation.Import;
 @RequiredArgsConstructor
 @Configuration
 @Import(UVB76ClientProperties.class)
-public class WatcherConfiguration {
-}
+public class WatcherConfiguration {}

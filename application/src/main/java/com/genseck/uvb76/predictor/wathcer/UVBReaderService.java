@@ -6,25 +6,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.genseck.uvb76.predictor.wathcer.dto.UVB76LogsDto;
 import com.genseck.uvb76.predictor.wathcer.properties.UVB76ClientProperties;
 import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
-
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class UVBReaderService {
 
-    private WebClient client;
     private final UVB76ClientProperties uvb76ClientProperties;
+    private WebClient client;
 
     @PostConstruct
     void init() {
@@ -38,10 +37,11 @@ public class UVBReaderService {
 
     public UVB76LogsDto getLatestPostsInner(boolean isTest) {
 
+        //TODO: Remove!
         if (isTest) {
             ClassLoader classloader = Thread.currentThread().getContextClassLoader();
             try {
-                URL url = classloader.getResource("example-local.json");
+                URL url = classloader.getResource("example.json");
                 Path path = Paths.get(url.toURI());
                 var line = Files.readAllLines(path, StandardCharsets.UTF_8).stream().collect(Collectors.joining());
                 var om = new ObjectMapper();

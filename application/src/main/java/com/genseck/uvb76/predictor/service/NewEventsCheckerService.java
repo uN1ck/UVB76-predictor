@@ -4,10 +4,6 @@ import com.genseck.uvb76.predictor.ai.AiClient;
 import com.genseck.uvb76.predictor.telegram.TelegramService;
 import com.genseck.uvb76.predictor.wathcer.UVBReaderService;
 import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -15,21 +11,20 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class NewEventsCheckerService {
 
-    private long lastMessageId = -1;
-
     private final UVBReaderService readerService;
     private final AiClient aiClient;
     private final TelegramService telegramService;
-
     private final ScheduledExecutorService sec = Executors.newSingleThreadScheduledExecutor();
+    private long lastMessageId = -1;
 
     @PostConstruct
     void init() {
@@ -43,21 +38,20 @@ public class NewEventsCheckerService {
             log.warn("No new messages found");
             return;
         }
-        var parsedMessages = parseMessage(lastMessage.getMessage());
 
-        //TODO: NPE!
+        var parsedMessages = parseMessage(lastMessage.getMessage());
+        if (parsedMessages.isEmpty()) {
+            log.error("Could not parse UVB message from String: {}", lastMessage.getMessage());
+            return;
+        }
+
         var processedMessage = aiClient.processMessage(parsedMessages.get(0));
-        telegramService.sendPrediction(processedMessage);
+        telegramService.sendPrediction(processedMessage, parsedMessages.get(0));
     }
 
-    public static List<String> parseMessage(String text) {
-        // Извлекаем сообщение, начинающееся с НЖТИ и заканчивающееся на группу цифр
-        Pattern pattern = Pattern.compile(
-                "(НЖТИ .+?<br>)"
-        );
-
+    private List<String> parseMessage(String text) {
+        Pattern pattern = Pattern.compile("(НЖТИ .+?<br>)");
         Matcher matcher = pattern.matcher(text);
-
         var results = new ArrayList<String>();
         while (matcher.find()) {
             String message = matcher.group()
